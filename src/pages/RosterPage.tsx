@@ -239,15 +239,19 @@ export default function RosterPage() {
   };
 
   const updateSpellNotes = (spellId: string, notes: string) => {
-    setRoster((prev) => ({
-      ...prev,
-      data: {
-        ...prev.data,
-        spells: prev.data.spells.map((s) =>
-          s.id === spellId ? { ...s, notes } : s,
-        ),
-      },
-    }));
+    setRoster((prev) => {
+      if (!prev) return prev; // <-- must be here, before returning an object
+
+      return {
+        ...prev,
+        data: {
+          ...prev.data,
+          spells: prev.data.spells.map((s) =>
+            s.id === spellId ? { ...s, notes } : s,
+          ),
+        },
+      };
+    });
   };
 
   const removeSpell = (spellId: string) =>
