@@ -4,9 +4,24 @@
 export interface Unit {
   id: string;
   name: string;
+
+  // Core progression fields
+  path: string;
+  rank: string;
+
+  // Stats
   points: number;
-  veteranLevel: number;
+  battleWounds: number;
+
+  // Flags
   reinforced: boolean;
+
+  // Optional campaign fields
+  battleScars: string;
+  enhancements: string;
+
+  // Abilities
+  abilities: string[];
 }
 
 // -----------------------------
@@ -25,6 +40,7 @@ export interface Regiment {
 export interface Spell {
   id: string;
   name: string;
+  notes?: string;
 }
 
 // -----------------------------

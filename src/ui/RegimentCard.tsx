@@ -9,6 +9,8 @@ export default function RegimentCard({
   onAddUnit,
   onUpdateUnit,
   onRemoveUnit,
+  onAddAbility,
+  onRemoveAbility,
   regimentPoints,
 }: RegimentCardProps) {
   return (
@@ -51,12 +53,25 @@ export default function RegimentCard({
             </p>
           )}
 
+          {/* Header Row */}
+          <div className="grid grid-cols-[2fr_1fr_1fr_0.7fr_0.7fr_2.4rem] gap-2 text-xs font-bold text-text/70 mt-2 px-1">
+            <div>Unit</div>
+            <div>Path</div>
+            <div>Rank</div>
+            <div>Pts</div>
+            <div>Wounds</div>
+            <div className="text-right pr-1 opacity-60">⋯</div>
+          </div>
+
+          {/* Unit Rows */}
           {regiment.units.map((u) => (
             <UnitRow
               key={u.id}
               unit={u}
-              onUpdate={(field, value) => onUpdateUnit(u.id, field, value)}
-              onRemove={() => onRemoveUnit(u.id)}
+              onUpdate={(id, field, value) => onUpdateUnit(id, field, value)}
+              onRemove={(id) => onRemoveUnit(id)}
+              onAddAbility={(id, ability) => onAddAbility(id, ability)}
+              onRemoveAbility={(id, index) => onRemoveAbility(id, index)}
             />
           ))}
         </div>

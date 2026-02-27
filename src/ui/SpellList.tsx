@@ -9,6 +9,7 @@ export default function SpellList({
   onAdd,
   onRename,
   onRemove,
+  onUpdateNotes,
 }: SpellListProps) {
   return (
     <section className="space-y-4">
@@ -38,22 +39,29 @@ export default function SpellList({
             <p className="text-xs text-text/60 italic">No spells yet.</p>
           )}
 
-          {spells.map((s) => (
+          {spells.map((spell) => (
             <div
-              key={s.id}
-              className="flex items-center justify-between border-b border-inputbg/40 py-1 text-xs"
+              key={spell.id}
+              className="flex flex-col gap-2 p-2 bg-inputbg/20 rounded"
             >
               <input
-                className="bg-inputbg border border-inputbg/60 rounded px-2 py-1 flex-1 mr-2"
-                value={s.name}
-                onChange={(e) => onRename(s.id, e.target.value)}
+                className="bg-inputbg p-1 rounded"
+                value={spell.name}
+                onChange={(e) => onRename(spell.id, e.target.value)}
+              />
+
+              <textarea
+                className="bg-inputbg p-1 rounded text-sm"
+                placeholder="Notes (optional)"
+                value={spell.notes ?? ""}
+                onChange={(e) => onUpdateNotes(spell.id, e.target.value)}
               />
 
               <button
-                className="px-2 py-1 bg-red-600 text-white rounded"
-                onClick={() => onRemove(s.id)}
+                className="text-red-500 text-xs"
+                onClick={() => onRemove(spell.id)}
               >
-                X
+                Delete
               </button>
             </div>
           ))}

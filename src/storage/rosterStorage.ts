@@ -55,8 +55,7 @@ export function saveRoster(roster: Roster) {
 }
 
 export function deleteRoster(id: string) {
-  const all = loadAll();
-  saveAll(all.filter((r) => r.id !== id));
+  localStorage.removeItem(`roster_${id}`);
 }
 
 export function getAllRosters(): Roster[] {

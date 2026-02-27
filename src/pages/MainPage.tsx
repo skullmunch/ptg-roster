@@ -1,11 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getAllRosters } from "../storage/rosterStorage";
 import { FACTION_ICONS } from "../ui/FactionIcons";
 import NavBar from "../ui/NavBar";
+import { deleteRoster } from "../storage/rosterStorage";
 
 export default function MainPage() {
-  const rosters = getAllRosters();
+  const [rosters, setRosters] = useState(getAllRosters());
+
+  const handleDelete = (e: React.MouseEvent, id: string) => {
+    e.preventDefault(); // prevent navigation
+    e.stopPropagation(); // prevent Link click
+
+    if (!confirm("Delete this roster permanently?")) return;
+
+    deleteRoster(id);
+    setRosters((prev) => prev.filter((r) => r.id !== id));
+  };
 
   // Reset theme when returning to main page
   useEffect(() => {
@@ -62,8 +73,16 @@ export default function MainPage() {
               <Link
                 key={r.id}
                 to={`/roster/${r.id}`}
-                className="p-5 rounded-xl border border-accent/40 bg-inputbg/20 shadow hover:shadow-lg hover:border-accent transition flex flex-col gap-4"
+                className="relative p-5 rounded-xl border border-accent/40 bg-inputbg/20 shadow hover:shadow-lg hover:border-accent transition flex flex-col gap-4"
               >
+                {/* DELETE BUTTON */}
+                <button
+                  className="absolute top-2 right-2 text-red-500 hover:text-red-700 text-lg"
+                  onClick={(e) => handleDelete(e, r.id)}
+                  title="Delete roster"
+                >
+                  🗑️
+                </button>
                 {/* FACTION CREST */}
                 <div className="flex items-center gap-3">
                   <div className="w-14 h-14 rounded-full bg-inputbg/40 flex items-center justify-center shadow-inner">
@@ -75,7 +94,6 @@ export default function MainPage() {
                     <p className="text-xs text-text/70">{r.formation}</p>
                   </div>
                 </div>
-
                 {/* STATS */}
                 <div className="grid grid-cols-3 text-center text-xs mt-2">
                   <div className="p-2 rounded bg-inputbg/30 border border-inputbg/40">

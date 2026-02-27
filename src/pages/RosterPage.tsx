@@ -151,8 +151,15 @@ export default function RosterPage() {
                   id: crypto.randomUUID(),
                   name: "New Unit",
                   points: 0,
-                  veteranLevel: 0,
                   reinforced: false,
+
+                  // New fields your UnitRow expects:
+                  path: "",
+                  rank: "",
+                  battleWounds: 0,
+                  battleScars: "",
+                  enhancements: "",
+                  abilities: [], // ← this prevents the blank page
                 },
               ],
             }
@@ -191,6 +198,33 @@ export default function RosterPage() {
       ),
     );
 
+  const addAbility = (unitId: string, ability: string) => {
+    setRegiments(
+      regiments.map((r) => ({
+        ...r,
+        units: r.units.map((u) =>
+          u.id === unitId ? { ...u, abilities: [...u.abilities, ability] } : u,
+        ),
+      })),
+    );
+  };
+
+  const removeAbility = (unitId: string, index: number) => {
+    setRegiments(
+      regiments.map((r) => ({
+        ...r,
+        units: r.units.map((u) =>
+          u.id === unitId
+            ? {
+                ...u,
+                abilities: u.abilities.filter((_, i) => i !== index),
+              }
+            : u,
+        ),
+      })),
+    );
+  };
+
   // Spells
   const setSpellsState = (value: Spell[]) => updateData({ spells: value });
 
@@ -202,6 +236,18 @@ export default function RosterPage() {
     };
     setSpellsState([...spells, spell]);
     setNewSpellName("");
+  };
+
+  const updateSpellNotes = (spellId: string, notes: string) => {
+    setRoster((prev) => ({
+      ...prev,
+      data: {
+        ...prev.data,
+        spells: prev.data.spells.map((s) =>
+          s.id === spellId ? { ...s, notes } : s,
+        ),
+      },
+    }));
   };
 
   const removeSpell = (spellId: string) =>
@@ -309,6 +355,8 @@ export default function RosterPage() {
                   updateUnit(reg.id, unitId, field, value)
                 }
                 onRemoveUnit={(unitId) => removeUnit(reg.id, unitId)}
+                onAddAbility={addAbility}
+                onRemoveAbility={removeAbility}
               />
             ))}
           </div>
@@ -324,6 +372,7 @@ export default function RosterPage() {
           onAdd={addSpell}
           onRename={renameSpell}
           onRemove={removeSpell}
+          onUpdateNotes={updateSpellNotes}
         />
       </div>
     </main>
