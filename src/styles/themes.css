@@ -1,0 +1,142 @@
+/* -------------------------------------------------------
+   DEFAULT THEME (Dark Grey)
+   ------------------------------------------------------- */
+:root {
+  --color-bg: #1e1e1e;
+  --color-text: #f2f2f2;
+  --color-accent: #6b7280;
+
+  /* Inputs */
+  --color-input-bg: #2a2a2a;
+  --color-input-text: #ffffff;
+}
+
+/* -------------------------------------------------------
+   SOULBLIGHT GRAVELORDS
+   Deep crimson + gothic black
+   ------------------------------------------------------- */
+.theme-soulblight {
+  --color-bg: #1a0004;
+  --color-text: #f8e4e8;
+  --color-accent: #b3001b;
+
+  --color-input-bg: #33000a;
+  --color-input-text: #ffe6ec;
+}
+
+/* -------------------------------------------------------
+   NIGHTHAUNT
+   Ethereal teal + ghostly black
+   ------------------------------------------------------- */
+.theme-nighthaunt {
+  --color-bg: #001f21;
+  --color-text: #d9ffff;
+  --color-accent: #00e1ff;
+
+  --color-input-bg: #003336;
+  --color-input-text: #d9ffff;
+}
+
+/* -------------------------------------------------------
+   STORMCAST ETERNALS
+   Gold + parchment
+   ------------------------------------------------------- */
+.theme-stormcast {
+  --color-bg: #fdf7e3;
+  --color-text: #2a1f00;
+  --color-accent: #d4af37;
+
+  --color-input-bg: #fff3c4;
+  --color-input-text: #2a1f00;
+}
+
+/* -------------------------------------------------------
+   ORRUK WARCLANS
+   Brutal green + dark iron
+   ------------------------------------------------------- */
+.theme-orruk {
+  --color-bg: #0f1a00;
+  --color-text: #e5ffcc;
+  --color-accent: #4d7f00;
+
+  --color-input-bg: #1a2b00;
+  --color-input-text: #e5ffcc;
+}
+
+/* -------------------------------------------------------
+   OGOR MAWTRIBES
+   Frostbitten leather + bone
+   ------------------------------------------------------- */
+.theme-ogor {
+  --color-bg: #2b1f1a;
+  --color-text: #f5e8d8;
+  --color-accent: #a67c52;
+
+  --color-input-bg: #3a2b24;
+  --color-input-text: #f5e8d8;
+}
+
+/* -------------------------------------------------------
+   SERAPHON
+   Cosmic blue + starborne teal
+   ------------------------------------------------------- */
+.theme-seraphon {
+  --color-bg: #001a26;
+  --color-text: #d6faff;
+  --color-accent: #00b3ff;
+
+  --color-input-bg: #003344;
+  --color-input-text: #d6faff;
+}
+
+/* -------------------------------------------------------
+   FYRESLAYERS
+   Magma orange + volcanic black
+   ------------------------------------------------------- */
+.theme-fyreslayers {
+  --color-bg: #2b0d00;
+  --color-text: #ffe6cc;
+  --color-accent: #ff6a00;
+
+  --color-input-bg: #3d1500;
+  --color-input-text: #ffe6cc;
+}
+
+/* -------------------------------------------------------
+   KHARADRON OVERLORDS
+   Aethermatic steel + sky blue
+   ------------------------------------------------------- */
+.theme-kharadron {
+  --color-bg: #1a1f26;
+  --color-text: #e6f0ff;
+  --color-accent: #7aa0c4;
+
+  --color-input-bg: #2a3340;
+  --color-input-text: #e6f0ff;
+}
+
+/* -------------------------------------------------------
+   SYLVANETH
+   Deep forest + living green
+   ------------------------------------------------------- */
+.theme-sylvaneth {
+  --color-bg: #0d1a0d;
+  --color-text: #e6ffe6;
+  --color-accent: #4caf50;
+
+  --color-input-bg: #1a3320;
+  --color-input-text: #e6ffe6;
+}
+
+/* -------------------------------------------------------
+   CITIES OF SIGMAR
+   Steel + navy + parchment
+   ------------------------------------------------------- */
+.theme-cities {
+  --color-bg: #f2f2f2;
+  --color-text: #1a1a1a;
+  --color-accent: #4a6ea9;
+
+  --color-input-bg: #e0e0e0;
+  --color-input-text: #1a1a1a;
+}

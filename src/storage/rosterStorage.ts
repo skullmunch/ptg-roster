@@ -1,6 +1,86 @@
 // rosterStorage.ts
-import type { Roster, Spell, Regiment } from "../types/types";
+import type { Roster, Spell, Regiment, Unit } from "../types/types";
 const STORAGE_KEY = "rosters";
+
+// Normalise any value into a clean array
+function toArray<T>(value: T[] | T | undefined | null): T[] {
+  if (Array.isArray(value)) return value.filter((v) => v !== "");
+  if (value == null || value === "") return [];
+  return [value];
+}
+
+// Normalise a single unit object
+function repairUnit(u: unknown): Unit {
+  const raw = u as Record<string, unknown>;
+
+  return {
+    id: typeof raw.id === "string" ? raw.id : crypto.randomUUID(),
+    name: typeof raw.name === "string" ? raw.name : "New Unit",
+
+    path: typeof raw.path === "string" ? raw.path : null,
+    rank: typeof raw.rank === "string" ? raw.rank : null,
+
+    points:
+      typeof raw.points === "number" ? raw.points : Number(raw.points ?? 0),
+
+    battleWounds:
+      typeof raw.battleWounds === "number"
+        ? raw.battleWounds
+        : Number(raw.battleWounds ?? 0),
+
+    reinforced: Boolean(raw.reinforced),
+
+    battleScars: toArray(
+      Array.isArray(raw.battleScars)
+        ? (raw.battleScars as unknown[])
+        : raw.battleScars,
+    ) as string[],
+
+    enhancements: toArray(
+      Array.isArray(raw.enhancements)
+        ? (raw.enhancements as unknown[])
+        : raw.enhancements,
+    ) as string[],
+
+    abilities: toArray(
+      Array.isArray(raw.abilities)
+        ? (raw.abilities as unknown[])
+        : raw.abilities,
+    ) as string[],
+  };
+}
+
+// Normalise a regiment and all its units
+function repairRegiment(r: unknown): Regiment {
+  const raw = r as Record<string, unknown>;
+
+  return {
+    id: typeof raw.id === "string" ? raw.id : crypto.randomUUID(),
+    name: typeof raw.name === "string" ? raw.name : "Unnamed Regiment",
+    isOpen: typeof raw.isOpen === "boolean" ? raw.isOpen : true,
+
+    units: Array.isArray(raw.units) ? raw.units.map((u) => repairUnit(u)) : [],
+  };
+}
+
+export function createNewUnit() {
+  return {
+    id: crypto.randomUUID(),
+    name: "",
+    points: 0,
+    battleWounds: 0,
+    reinforced: false,
+
+    // Conditional fields start empty
+    path: null,
+    rank: null,
+
+    // Always arrays
+    battleScars: [],
+    enhancements: [],
+    abilities: [],
+  };
+}
 
 export function loadAll(): Roster[] {
   const raw = localStorage.getItem(STORAGE_KEY);
@@ -48,7 +128,7 @@ export function repairRoster(raw: unknown): Roster {
           ? data.terrainPurchased
           : false,
       regiments: Array.isArray(data.regiments)
-        ? (data.regiments as Regiment[])
+        ? data.regiments.map(repairRegiment)
         : [],
     },
   };

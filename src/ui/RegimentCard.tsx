@@ -14,20 +14,23 @@ export default function RegimentCard({
   regimentPoints,
 }: RegimentCardProps) {
   return (
-    <div className="rounded-lg border border-accent/40 bg-inputbg/20 shadow">
-      {/* Header */}
+    <div className="rounded-lg border border-accent/40 bg-inputbg/20 shadow overflow-hidden w-full">
+      {/* Regiment Header */}
       <div className="flex items-center justify-between px-4 py-3 bg-inputbg/30 border-b border-accent/30">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 min-w-0">
           <button onClick={onToggle}>{regiment.isOpen ? "▾" : "▸"}</button>
+
           <input
-            className="bg-transparent border-b border-transparent focus:border-accent/60 outline-none text-sm"
+            className="bg-transparent border-b border-transparent focus:border-accent/60 outline-none text-sm break-words min-w-0"
             value={regiment.name}
             onChange={(e) => onRename(e.target.value)}
           />
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="text-xs text-text/70">{regimentPoints} pts</span>
+          <span className="text-xs text-text/70 whitespace-nowrap">
+            {regimentPoints} pts
+          </span>
           <button
             className="text-xs px-2 py-1 bg-red-600 text-white rounded"
             onClick={onRemove}
@@ -37,9 +40,10 @@ export default function RegimentCard({
         </div>
       </div>
 
-      {/* Body */}
+      {/* Regiment Body */}
       {regiment.isOpen && (
-        <div className="px-4 py-3 space-y-3">
+        <div className="px-4 py-3 space-y-4 w-full">
+          {/* Add Unit */}
           <button
             className="px-2 py-1 bg-accent rounded text-xs"
             onClick={onAddUnit}
@@ -47,23 +51,14 @@ export default function RegimentCard({
             + Add Unit
           </button>
 
+          {/* Empty State */}
           {regiment.units.length === 0 && (
             <p className="text-xs text-text/60 italic">
               No units in this regiment.
             </p>
           )}
 
-          {/* Header Row */}
-          <div className="grid grid-cols-[2fr_1fr_1fr_0.7fr_0.7fr_2.4rem] gap-2 text-xs font-bold text-text/70 mt-2 px-1">
-            <div>Unit</div>
-            <div>Path</div>
-            <div>Rank</div>
-            <div>Pts</div>
-            <div>Wounds</div>
-            <div className="text-right pr-1 opacity-60">⋯</div>
-          </div>
-
-          {/* Unit Rows */}
+          {/* Unit Cards */}
           {regiment.units.map((u) => (
             <UnitRow
               key={u.id}

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getRoster, saveRoster } from "../storage/rosterStorage";
+import { getRoster, saveRoster, createNewUnit } from "../storage/rosterStorage";
 import type { Roster, RosterData, Regiment, Unit, Spell } from "../types/types";
 import NavBar from "../ui/NavBar";
 import EmbershardPanel from "../ui/EmbershardPanel";
@@ -147,23 +147,7 @@ export default function RosterPage() {
         r.id === regId
           ? {
               ...r,
-              units: [
-                ...r.units,
-                {
-                  id: crypto.randomUUID(),
-                  name: "New Unit",
-                  points: 0,
-                  reinforced: false,
-
-                  // New fields your UnitRow expects:
-                  path: "",
-                  rank: "",
-                  battleWounds: 0,
-                  battleScars: "",
-                  enhancements: "",
-                  abilities: [], // ← this prevents the blank page
-                },
-              ],
+              units: [...r.units, createNewUnit()],
             }
           : r,
       ),
@@ -284,8 +268,6 @@ export default function RosterPage() {
       <div className="max-w-4xl mx-auto px-4 py-6 space-y-10">
         {/* HEADER */}
         <header className="relative p-6 rounded-xl bg-gradient-to-br from-bg/60 to-bg/20 border border-accent/40 shadow-lg overflow-hidden">
-          <div className="absolute inset-0 opacity-10 bg-[url('/textures/parchment.png')] pointer-events-none" />
-
           <div className="relative flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold tracking-wide">

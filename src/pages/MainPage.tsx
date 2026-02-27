@@ -32,7 +32,7 @@ export default function MainPage() {
       <div className="p-6 max-w-5xl mx-auto space-y-10">
         {/* HEADER */}
         <header className="relative p-6 rounded-xl bg-gradient-to-br from-bg/60 to-bg/20 border border-accent/40 shadow-lg overflow-hidden">
-          <div className="absolute inset-0 opacity-10 bg-[url('/textures/parchment.png')] pointer-events-none" />
+          <div className="absolute inset-0 opacity-10 pointer-events-none" />
 
           <div className="relative">
             <h1 className="text-4xl font-bold tracking-wide">Your Rosters</h1>

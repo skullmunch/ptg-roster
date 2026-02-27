@@ -6,8 +6,8 @@ export interface Unit {
   name: string;
 
   // Core progression fields
-  path: string;
-  rank: string;
+  path: string | null;
+  rank: string | null;
 
   // Stats
   points: number;
@@ -17,8 +17,8 @@ export interface Unit {
   reinforced: boolean;
 
   // Optional campaign fields
-  battleScars: string;
-  enhancements: string;
+  battleScars: string[];
+  enhancements: string[];
 
   // Abilities
   abilities: string[];
