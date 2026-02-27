@@ -1,16 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { getAllRosters } from "../storage/rosterStorage";
+import { getAllRosters, deleteRoster } from "../storage/rosterStorage";
 import { FACTION_ICONS } from "../ui/FactionIcons";
 import NavBar from "../ui/NavBar";
-import { deleteRoster } from "../storage/rosterStorage";
+import type React from "react";
 
 export default function MainPage() {
   const [rosters, setRosters] = useState(getAllRosters());
 
+  // Capture "now" once per render, React-safe
+  const nowRef = useRef(Date.now());
+
   const handleDelete = (e: React.MouseEvent, id: string) => {
-    e.preventDefault(); // prevent navigation
-    e.stopPropagation(); // prevent Link click
+    e.preventDefault();
+    e.stopPropagation();
 
     if (!confirm("Delete this roster permanently?")) return;
 
@@ -18,7 +21,6 @@ export default function MainPage() {
     setRosters((prev) => prev.filter((r) => r.id !== id));
   };
 
-  // Reset theme when returning to main page
   useEffect(() => {
     document.documentElement.className = "";
   }, []);
@@ -69,6 +71,25 @@ export default function MainPage() {
                 0,
               ) ?? 0;
 
+            const updatedDate = new Date(r.lastUpdated).toLocaleDateString(
+              "en-GB",
+              {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              },
+            );
+
+            const diffMs = nowRef.current - r.lastUpdated;
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+            const relative =
+              diffDays === 0
+                ? "today"
+                : diffDays === 1
+                  ? "1 day ago"
+                  : `${diffDays} days ago`;
+
             return (
               <Link
                 key={r.id}
@@ -83,6 +104,7 @@ export default function MainPage() {
                 >
                   🗑️
                 </button>
+
                 {/* FACTION CREST */}
                 <div className="flex items-center gap-3">
                   <div className="w-14 h-14 rounded-full bg-inputbg/40 flex items-center justify-center shadow-inner">
@@ -94,6 +116,7 @@ export default function MainPage() {
                     <p className="text-xs text-text/70">{r.formation}</p>
                   </div>
                 </div>
+
                 {/* STATS */}
                 <div className="grid grid-cols-3 text-center text-xs mt-2">
                   <div className="p-2 rounded bg-inputbg/30 border border-inputbg/40">
@@ -111,6 +134,11 @@ export default function MainPage() {
                     <p className="text-text/70">Points</p>
                   </div>
                 </div>
+
+                {/* LAST UPDATED */}
+                <p className="text-[10px] text-text/60 mt-1">
+                  Updated {updatedDate} • {relative}
+                </p>
               </Link>
             );
           })}

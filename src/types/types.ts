@@ -62,6 +62,7 @@ export interface Roster {
   id: string;
   name: string;
   formation: string;
-  faction?: string;
+  faction: string;
+  lastUpdated: number; // epoch ms
   data: RosterData;
 }

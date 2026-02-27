@@ -25,6 +25,7 @@ export function repairRoster(raw: any): Roster {
     name: raw.name ?? "Unnamed Roster",
     formation: raw.formation ?? "Unknown",
     faction: raw.faction ?? "unknown",
+    lastUpdated: raw.lastUpdated ?? Date.now(),
 
     data: {
       theme: raw.data?.theme ?? "default",
@@ -47,15 +48,23 @@ export function getRoster(id: string | undefined): Roster | null {
 export function saveRoster(roster: Roster) {
   const all = loadAll();
   const repaired = repairRoster(roster);
-  const updated = all.some((r) => r.id === repaired.id)
-    ? all.map((r) => (r.id === repaired.id ? repaired : r))
-    : [...all, repaired];
 
-  saveAll(updated);
+  const updated = {
+    ...repaired,
+    lastUpdated: Date.now(),
+  };
+
+  const idx = all.findIndex((r) => r.id === updated.id);
+  if (idx >= 0) all[idx] = updated;
+  else all.push(updated);
+
+  saveAll(all);
 }
 
 export function deleteRoster(id: string) {
-  localStorage.removeItem(`roster_${id}`);
+  const all = loadAll();
+  const filtered = all.filter((r) => r.id !== id);
+  saveAll(filtered);
 }
 
 export function getAllRosters(): Roster[] {
