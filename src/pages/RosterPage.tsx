@@ -36,7 +36,9 @@ export default function RosterPage() {
       },
     };
 
-    setRoster(safe);
+    queueMicrotask(() => {
+      setRoster(safe);
+    });
   }, [id]);
 
   // Autosave
@@ -167,24 +169,33 @@ export default function RosterPage() {
       ),
     );
 
-  const updateUnit = (
+  const updateUnit = <K extends keyof Unit>(
     regId: string,
     unitId: string,
-    field: keyof Unit,
-    value: any,
-  ) =>
-    setRegiments(
-      regiments.map((r) =>
-        r.id === regId
-          ? {
-              ...r,
-              units: r.units.map((u) =>
-                u.id === unitId ? { ...u, [field]: value } : u,
-              ),
-            }
-          : r,
-      ),
-    );
+    field: K,
+    value: Unit[K],
+  ) => {
+    setRoster((prev) => {
+      if (!prev) return prev;
+
+      return {
+        ...prev,
+        data: {
+          ...prev.data,
+          regiments: prev.data.regiments.map((reg) =>
+            reg.id !== regId
+              ? reg
+              : {
+                  ...reg,
+                  units: reg.units.map((u) =>
+                    u.id !== unitId ? u : { ...u, [field]: value },
+                  ),
+                },
+          ),
+        },
+      };
+    });
+  };
 
   const removeUnit = (regId: string, unitId: string) =>
     setRegiments(

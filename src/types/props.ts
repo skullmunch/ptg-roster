@@ -22,7 +22,11 @@ export interface UnitRowProps {
   unit: Unit;
 
   // Must match UnitRow.tsx exactly
-  onUpdate: (id: string, field: keyof Unit, value: any) => void;
+  onUpdate: <K extends keyof Unit>(
+    id: string,
+    field: K,
+    value: Unit[K],
+  ) => void;
   onRemove: (id: string) => void;
 
   onAddAbility: (id: string, ability: string) => void;
@@ -39,7 +43,11 @@ export interface RegimentCardProps {
   onToggle: () => void;
 
   onAddUnit: () => void;
-  onUpdateUnit: (id: string, field: keyof Unit, value: any) => void;
+  onUpdateUnit: <K extends keyof Unit>(
+    id: string,
+    field: K,
+    value: Unit[K],
+  ) => void;
   onRemoveUnit: (id: string) => void;
 
   // Must match UnitRow exactly

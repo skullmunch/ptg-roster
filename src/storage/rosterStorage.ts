@@ -1,39 +1,55 @@
 // rosterStorage.ts
-import type { Roster } from "../types/types";
+import type { Roster, Spell, Regiment } from "../types/types";
 const STORAGE_KEY = "rosters";
 
-function loadAll(): Roster[] {
+export function loadAll(): Roster[] {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return [];
+
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
+    const parsed: unknown = JSON.parse(raw);
+
     if (!Array.isArray(parsed)) return [];
-    return parsed.map(repairRoster);
+
+    return parsed.map((item) => repairRoster(item));
   } catch {
     return [];
   }
 }
 
-function saveAll(rosters: Roster[]) {
+export function saveAll(rosters: Roster[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(rosters));
 }
 
 // Ensures every roster has a complete, valid data object
-export function repairRoster(raw: any): Roster {
+export function repairRoster(raw: unknown): Roster {
+  const r = raw as Record<string, unknown>;
+
+  const data = (r.data as Record<string, unknown>) ?? {};
+
   return {
-    id: raw.id ?? crypto.randomUUID(),
-    name: raw.name ?? "Unnamed Roster",
-    formation: raw.formation ?? "Unknown",
-    faction: raw.faction ?? "unknown",
-    lastUpdated: raw.lastUpdated ?? Date.now(),
+    id: typeof r.id === "string" ? r.id : crypto.randomUUID(),
+    name: typeof r.name === "string" ? r.name : "Unnamed Roster",
+    formation: typeof r.formation === "string" ? r.formation : "",
+    faction: typeof r.faction === "string" ? r.faction : "cities",
+    lastUpdated: typeof r.lastUpdated === "number" ? r.lastUpdated : Date.now(),
 
     data: {
-      theme: raw.data?.theme ?? "default",
-      totalEmbershards: raw.data?.totalEmbershards ?? 0,
-      currentEmbershards: raw.data?.currentEmbershards ?? 0,
-      terrainPurchased: raw.data?.terrainPurchased ?? false,
-      regiments: Array.isArray(raw.data?.regiments) ? raw.data.regiments : [],
-      spells: Array.isArray(raw.data?.spells) ? raw.data.spells : [],
+      spells: Array.isArray(data.spells) ? (data.spells as Spell[]) : [],
+      theme: typeof data.theme === "string" ? data.theme : "default",
+      totalEmbershards:
+        typeof data.totalEmbershards === "number" ? data.totalEmbershards : 0,
+      currentEmbershards:
+        typeof data.currentEmbershards === "number"
+          ? data.currentEmbershards
+          : 0,
+      terrainPurchased:
+        typeof data.terrainPurchased === "boolean"
+          ? data.terrainPurchased
+          : false,
+      regiments: Array.isArray(data.regiments)
+        ? (data.regiments as Regiment[])
+        : [],
     },
   };
 }
@@ -47,10 +63,9 @@ export function getRoster(id: string | undefined): Roster | null {
 
 export function saveRoster(roster: Roster) {
   const all = loadAll();
-  const repaired = repairRoster(roster);
 
-  const updated = {
-    ...repaired,
+  const updated: Roster = {
+    ...roster,
     lastUpdated: Date.now(),
   };
 

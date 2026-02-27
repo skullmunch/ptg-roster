@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getAllRosters, deleteRoster } from "../storage/rosterStorage";
 import { FACTION_ICONS } from "../ui/FactionIcons";
@@ -8,8 +8,8 @@ import type React from "react";
 export default function MainPage() {
   const [rosters, setRosters] = useState(getAllRosters());
 
-  // Capture "now" once per render, React-safe
-  const nowRef = useRef(Date.now());
+  // React‑19 safe: compute once before first render
+  const [now] = useState(() => Date.now());
 
   const handleDelete = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
@@ -80,7 +80,7 @@ export default function MainPage() {
               },
             );
 
-            const diffMs = nowRef.current - r.lastUpdated;
+            const diffMs = now - r.lastUpdated;
             const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
             const relative =
