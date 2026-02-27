@@ -53,6 +53,8 @@ export interface RosterData {
   terrainPurchased: boolean;
   regiments: Regiment[];
   spells: Spell[];
+  games: GameEntry[];
+  upgrades: UpgradeEntry[];
 }
 
 // -----------------------------
@@ -65,4 +67,18 @@ export interface Roster {
   faction: string;
   lastUpdated: number; // epoch ms
   data: RosterData;
+}
+
+export interface GameEntry {
+  id: string;
+  opponent: string;
+  battleplan: string;
+  shards: number;
+  winner: "you" | "opponent";
+}
+
+export interface UpgradeEntry {
+  id: string;
+  description: string;
+  cost: number;
 }

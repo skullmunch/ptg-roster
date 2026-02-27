@@ -6,6 +6,8 @@ import "./index.css";
 import MainPage from "./pages/MainPage";
 import CreateRosterPage from "./pages/CreateRosterPage";
 import RosterPage from "./pages/RosterPage";
+import TutorialPage from "./pages/TutorialPage";
+import ChangelogPage from "./pages/ChangelogPage";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -13,6 +15,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/create" element={<CreateRosterPage />} />
+        <Route path="/tutorial" element={<TutorialPage />} />
+        <Route path="/changelog" element={<ChangelogPage />} />
         <Route path="/roster/:id" element={<RosterPage />} />
       </Routes>
     </BrowserRouter>

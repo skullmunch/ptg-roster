@@ -1,4 +1,5 @@
 import type { EmbershardPanelProps } from "../types/props";
+import { useState } from "react";
 
 export default function EmbershardPanel({
   total,
@@ -11,41 +12,105 @@ export default function EmbershardPanel({
   decCurrent,
   toggleTerrain,
 }: EmbershardPanelProps) {
+  const [editTotal, setEditTotal] = useState(false);
+  const [editCurrent, setEditCurrent] = useState(false);
+
+  // Shared square button style
+  const squareBtn =
+    "w-8 h-8 flex items-center justify-center bg-accent rounded";
+
   return (
     <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
       {/* Total */}
-      <div className="p-4 rounded-lg bg-inputbg/20 border border-accent/40 shadow">
-        <span className="text-xs text-text/70">Total Embershards</span>
+      <div className="p-4 rounded-lg bg-inputbg/20 border border-accent/40 shadow text-center">
+        <span className="text-xs text-text/70 block text-center">
+          Total Embershards
+        </span>
+
         <div className="flex items-center justify-between mt-1">
-          <button className="px-2 py-1 bg-accent rounded" onClick={decTotal}>
-            -
+          {/* Left button */}
+          {editTotal ? (
+            <button
+              className={squareBtn}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={decTotal}
+            >
+              -
+            </button>
+          ) : (
+            <div className="w-8 h-8" />
+          )}
+
+          {/* Centered number */}
+          <button
+            className="text-2xl font-bold bg-transparent cursor-pointer select-none text-center w-full"
+            onClick={() => setEditTotal(true)}
+            onBlur={() => setEditTotal(false)}
+          >
+            {total}
           </button>
-          <span className="text-xl font-semibold">{total}</span>
-          <button className="px-2 py-1 bg-accent rounded" onClick={incTotal}>
-            +
-          </button>
+
+          {/* Right button */}
+          {editTotal ? (
+            <button
+              className={squareBtn}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={incTotal}
+            >
+              +
+            </button>
+          ) : (
+            <div className="w-8 h-8" />
+          )}
         </div>
       </div>
 
       {/* Current */}
-      <div className="p-4 rounded-lg bg-inputbg/20 border border-accent/40 shadow">
-        <span className="text-xs text-text/70">Current Embershards</span>
+      <div className="p-4 rounded-lg bg-inputbg/20 border border-accent/40 shadow text-center">
+        <span className="text-xs text-text/70 block text-center">
+          Current Embershards
+        </span>
+
         <div className="flex items-center justify-between mt-1">
-          <button className="px-2 py-1 bg-accent rounded" onClick={decCurrent}>
-            -
+          {/* Left button */}
+          {editCurrent ? (
+            <button
+              className={squareBtn}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={decCurrent}
+            >
+              -
+            </button>
+          ) : (
+            <div className="w-8 h-8" />
+          )}
+
+          {/* Centered number */}
+          <button
+            className="text-2xl font-bold bg-transparent cursor-pointer select-none text-center w-full"
+            onClick={() => setEditCurrent(true)}
+            onBlur={() => setEditCurrent(false)}
+          >
+            {current}
           </button>
-          <span className="text-xl font-semibold">{current}</span>
-          <button className="px-2 py-1 bg-accent rounded" onClick={incCurrent}>
-            +
-          </button>
+
+          {/* Right button */}
+          {editCurrent ? (
+            <button
+              className={squareBtn}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={incCurrent}
+            >
+              +
+            </button>
+          ) : (
+            <div className="w-8 h-8" />
+          )}
         </div>
       </div>
 
       {/* Points + Terrain */}
-      <div
-        className="p-4 rounded-lg bg-inputbg/20 border border-accent/40 shadow
-                flex flex-col items-center text-center"
-      >
+      <div className="p-4 rounded-lg bg-inputbg/20 border border-accent/40 shadow flex flex-col items-center text-center">
         <span className="text-xs text-text/70">Total Army Points</span>
 
         <span className="text-2xl font-bold mt-1 block">{totalPoints}</span>

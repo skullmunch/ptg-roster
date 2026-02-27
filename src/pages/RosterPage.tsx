@@ -7,6 +7,9 @@ import EmbershardPanel from "../ui/EmbershardPanel";
 import RegimentCard from "../ui/RegimentCard";
 import SpellList from "../ui/SpellList";
 import { FACTION_ICONS } from "../ui/FactionIcons";
+import GameLogPage from "./GameLogPage";
+import UpgradeLogPage from "./UpgradeLogPage";
+//import EconomySummary from "../ui/EconomySummary";
 
 export default function RosterPage() {
   const { id } = useParams();
@@ -21,6 +24,9 @@ export default function RosterPage() {
   const [themeModal, setThemeModal] = useState(false);
   const [editingName, setEditingName] = useState(false);
   const [editingFormation, setEditingFormation] = useState(false);
+  const [activeTab, setActiveTab] = useState<"roster" | "games" | "upgrades">(
+    "roster",
+  );
 
   // Load roster
   useEffect(() => {
@@ -36,6 +42,8 @@ export default function RosterPage() {
         terrainPurchased: raw.data?.terrainPurchased ?? false,
         regiments: raw.data?.regiments ?? [],
         spells: raw.data?.spells ?? [],
+        games: raw.data?.games ?? [],
+        upgrades: raw.data?.upgrades ?? [],
       },
     };
 
@@ -132,8 +140,18 @@ export default function RosterPage() {
     setNewRegimentName("");
   };
 
-  const removeRegiment = (regId: string) =>
+  const removeRegiment = (regId: string) => {
+    const regiment = regiments.find((r) => r.id === regId);
+    if (!regiment) return;
+
+    const ok = window.confirm(
+      `Are you sure you want to delete the regiment "${regiment.name}"?\n\nThis will also delete all units inside it.`,
+    );
+
+    if (!ok) return;
+
     setRegiments(regiments.filter((r) => r.id !== regId));
+  };
 
   const toggleRegiment = (regId: string) =>
     setRegiments(
@@ -369,63 +387,167 @@ export default function RosterPage() {
           toggleTerrain={toggleTerrain}
         />
 
-        {/* REGIMENTS */}
-        <section className="space-y-4">
-          <h2 className="text-xl font-bold tracking-wide">Regiments</h2>
+        {/* TABS */}
+        <div className="flex gap-4 text-sm font-semibold border-b border-inputbg/40 mb-4">
+          <button
+            className={`pb-2 ${
+              activeTab === "roster"
+                ? "text-accent border-b-2 border-accent"
+                : "text-text/60"
+            }`}
+            onClick={() => setActiveTab("roster")}
+          >
+            Roster
+          </button>
 
-          <div className="flex gap-2 text-sm">
-            <input
-              className="border border-accent/40 rounded bg-inputbg text-inputtext px-2 py-1 flex-1"
-              placeholder="New regiment name"
-              value={newRegimentName}
-              onChange={(e) => setNewRegimentName(e.target.value)}
+          <button
+            className={`pb-2 ${
+              activeTab === "games"
+                ? "text-accent border-b-2 border-accent"
+                : "text-text/60"
+            }`}
+            onClick={() => setActiveTab("games")}
+          >
+            Games
+          </button>
+
+          <button
+            className={`pb-2 ${
+              activeTab === "upgrades"
+                ? "text-accent border-b-2 border-accent"
+                : "text-text/60"
+            }`}
+            onClick={() => setActiveTab("upgrades")}
+          >
+            Upgrades
+          </button>
+        </div>
+
+        {/*<EconomySummary
+          total={totalEmbershards}
+          current={currentEmbershards}
+          games={roster.data.games}
+          upgrades={roster.data.upgrades}
+        />*/}
+
+        {activeTab === "roster" && (
+          <>
+            {/* REGIMENTS */}
+            <section className="space-y-4">
+              <h2 className="text-xl font-bold tracking-wide">Regiments</h2>
+
+              <div className="flex gap-2 text-sm">
+                <input
+                  className="border border-accent/40 rounded bg-inputbg text-inputtext px-2 py-1 flex-1"
+                  placeholder="New regiment name"
+                  value={newRegimentName}
+                  onChange={(e) => setNewRegimentName(e.target.value)}
+                />
+                <button
+                  className="px-3 py-1 bg-accent rounded"
+                  onClick={addRegiment}
+                >
+                  + Add Regiment
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {regiments.length === 0 && (
+                  <p className="text-xs text-text/60 italic">
+                    No regiments yet.
+                  </p>
+                )}
+
+                {regiments.map((reg) => (
+                  <RegimentCard
+                    key={reg.id}
+                    regiment={reg}
+                    regimentPoints={regimentPoints(reg)}
+                    onRename={(name) => renameRegiment(reg.id, name)}
+                    onRemove={() => removeRegiment(reg.id)}
+                    onToggle={() => toggleRegiment(reg.id)}
+                    onAddUnit={() => addUnit(reg.id)}
+                    onUpdateUnit={(unitId, field, value) =>
+                      updateUnit(reg.id, unitId, field, value)
+                    }
+                    onRemoveUnit={(unitId) => removeUnit(reg.id, unitId)}
+                    onAddAbility={addAbility}
+                    onRemoveAbility={removeAbility}
+                  />
+                ))}
+              </div>
+            </section>
+
+            {/* SPELLS */}
+            <SpellList
+              spells={spells}
+              spellsOpen={spellsOpen}
+              newSpellName={newSpellName}
+              setNewSpellName={setNewSpellName}
+              onToggle={() => setSpellsOpen((o) => !o)}
+              onAdd={addSpell}
+              onRename={renameSpell}
+              onRemove={removeSpell}
+              onUpdateNotes={updateSpellNotes}
             />
-            <button
-              className="px-3 py-1 bg-accent rounded"
-              onClick={addRegiment}
-            >
-              + Add Regiment
-            </button>
-          </div>
+          </>
+        )}
 
-          <div className="space-y-4">
-            {regiments.length === 0 && (
-              <p className="text-xs text-text/60 italic">No regiments yet.</p>
-            )}
+        {activeTab === "games" && (
+          <GameLogPage
+            games={roster.data.games}
+            onAddGame={(g) =>
+              updateData({
+                games: [...(roster.data.games ?? []), g],
+                currentEmbershards: roster.data.currentEmbershards + g.shards,
+                totalEmbershards: roster.data.totalEmbershards + g.shards,
+              })
+            }
+            onRemoveGame={(id) => {
+              const game = roster.data.games.find((g) => g.id === id);
+              if (!game) return;
 
-            {regiments.map((reg) => (
-              <RegimentCard
-                key={reg.id}
-                regiment={reg}
-                regimentPoints={regimentPoints(reg)}
-                onRename={(name) => renameRegiment(reg.id, name)}
-                onRemove={() => removeRegiment(reg.id)}
-                onToggle={() => toggleRegiment(reg.id)}
-                onAddUnit={() => addUnit(reg.id)}
-                onUpdateUnit={(unitId, field, value) =>
-                  updateUnit(reg.id, unitId, field, value)
-                }
-                onRemoveUnit={(unitId) => removeUnit(reg.id, unitId)}
-                onAddAbility={addAbility}
-                onRemoveAbility={removeAbility}
-              />
-            ))}
-          </div>
-        </section>
+              updateData({
+                games: roster.data.games.filter((g) => g.id !== id),
+                currentEmbershards: Math.max(
+                  0,
+                  roster.data.currentEmbershards - game.shards,
+                ),
+                totalEmbershards: Math.max(
+                  0,
+                  roster.data.totalEmbershards - game.shards,
+                ),
+              });
+            }}
+          />
+        )}
 
-        {/* SPELLS */}
-        <SpellList
-          spells={spells}
-          spellsOpen={spellsOpen}
-          newSpellName={newSpellName}
-          setNewSpellName={setNewSpellName}
-          onToggle={() => setSpellsOpen((o) => !o)}
-          onAdd={addSpell}
-          onRename={renameSpell}
-          onRemove={removeSpell}
-          onUpdateNotes={updateSpellNotes}
-        />
+        {activeTab === "upgrades" && (
+          <UpgradeLogPage
+            upgrades={roster.data.upgrades}
+            onAddUpgrade={(u) =>
+              updateData({
+                upgrades: [...(roster.data.upgrades ?? []), u],
+                currentEmbershards: Math.max(
+                  0,
+                  roster.data.currentEmbershards - u.cost,
+                ),
+              })
+            }
+            onRemoveUpgrade={(id) => {
+              const upgrade = roster.data.upgrades.find((u) => u.id === id);
+              if (!upgrade) return;
+
+              updateData({
+                upgrades: roster.data.upgrades.filter((u) => u.id !== id),
+                currentEmbershards:
+                  roster.data.currentEmbershards + upgrade.cost,
+              });
+            }}
+          />
+        )}
       </div>
+
       {themeModal && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
           <div className="bg-bg p-4 rounded-xl border border-accent/40 max-w-md w-full max-h-[80vh] overflow-y-auto space-y-4 shadow-xl">

@@ -34,6 +34,8 @@ export default function CreateRosterPage() {
         terrainPurchased: false,
         regiments: [],
         spells: [],
+        games: [],
+        upgrades: [],
       },
     };
 

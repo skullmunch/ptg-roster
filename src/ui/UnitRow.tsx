@@ -39,6 +39,15 @@ export default function UnitRow({
     <div className="border-t border-inputbg/40 pt-3 pb-4 w-full">
       {/* Essentials Bar */}
       <div className="flex items-center justify-between gap-2">
+        {/* ▼ Expand button moved to the LEFT */}
+        <button
+          className="text-xs text-text/60 hover:text-text transition-transform"
+          onClick={() => setExpanded((v) => !v)}
+        >
+          {expanded ? "▴" : "▾"}
+        </button>
+
+        {/* Name */}
         <input
           className="bg-inputbg p-1 rounded text-sm font-semibold flex-1 min-w-0"
           placeholder="Warscroll Name"
@@ -87,20 +96,11 @@ export default function UnitRow({
               const newPoints = newReinforced
                 ? unit.points * 2
                 : unit.points / 2;
-
               onUpdate(unit.id, "points", newPoints);
               onUpdate(unit.id, "reinforced", newReinforced);
             }}
           >
             R
-          </button>
-
-          {/* Expand */}
-          <button
-            className="text-xs text-text/60 hover:text-text"
-            onClick={() => setExpanded((v) => !v)}
-          >
-            {expanded ? "▴" : "▾"}
           </button>
 
           {/* Remove */}
@@ -151,17 +151,14 @@ export default function UnitRow({
 
           {unit.path && (
             <div className="flex flex-col gap-2">
-              {/* Path row with remove button */}
+              {/* Path row */}
               <div className="flex items-center gap-2">
                 <label className="w-20 text-text/70">Path</label>
-
                 <input
                   className="bg-inputbg p-1 rounded flex-1"
                   value={unit.path}
                   onChange={(e) => onUpdate(unit.id, "path", e.target.value)}
                 />
-
-                {/* Remove Path button */}
                 <button
                   className="text-red-500 font-bold text-lg leading-none hover:text-red-400"
                   onClick={() => {
@@ -173,7 +170,7 @@ export default function UnitRow({
                 </button>
               </div>
 
-              {/* Rank only shows when path exists */}
+              {/* Rank */}
               <div className="flex items-center gap-2">
                 <label className="w-20 text-text/70">Rank</label>
                 <select
@@ -193,7 +190,6 @@ export default function UnitRow({
           {/* BATTLE SCARS */}
           <div>
             <div className="font-semibold mb-1">Battle Scars</div>
-
             {battleScars.map((scar, i) => (
               <div key={i} className="flex justify-between items-center mb-1">
                 <span>{scar}</span>
@@ -251,7 +247,6 @@ export default function UnitRow({
           {/* ENHANCEMENTS */}
           <div>
             <div className="font-semibold mb-1">Enhancements</div>
-
             {enhancements.map((enh, i) => (
               <div key={i} className="flex justify-between items-center mb-1">
                 <span>{enh}</span>
@@ -310,7 +305,6 @@ export default function UnitRow({
           {unit.path && (
             <div>
               <div className="font-semibold mb-1">Abilities</div>
-
               {abilities.map((ability, i) => (
                 <div key={i} className="flex justify-between items-center mb-1">
                   <span>{ability}</span>

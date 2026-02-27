@@ -22,9 +22,14 @@ export default function NavBar() {
   return (
     <nav className="sticky top-0 z-50 bg-bg/80 backdrop-blur-md border-b border-accent/40 shadow-lg">
       <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-        {/* Left: App Title */}
+        {/* Left: App Title + Version */}
         <Link to="/" className="flex items-center gap-3">
-          <div className="text-2xl font-bold tracking-wide">Path to Glory</div>
+          <div className="flex items-baseline gap-2">
+            <div className="text-2xl font-bold tracking-wide">
+              Path to Glory
+            </div>
+            <span className="text-[10px] text-text/60 tracking-wide">v1.0</span>
+          </div>
         </Link>
 
         {/* Center: Navigation Links */}
@@ -32,8 +37,17 @@ export default function NavBar() {
           <Link to="/" className={isActive("/")}>
             Rosters
           </Link>
+
           <Link to="/create" className={isActive("/create")}>
             Create
+          </Link>
+
+          <Link to="/tutorial" className={isActive("/tutorial")}>
+            Tutorial
+          </Link>
+
+          <Link to="/changelog" className={isActive("/changelog")}>
+            Changelog
           </Link>
         </div>
 

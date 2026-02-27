@@ -1,5 +1,12 @@
 // rosterStorage.ts
-import type { Roster, Spell, Regiment, Unit } from "../types/types";
+import type {
+  Roster,
+  Spell,
+  Regiment,
+  Unit,
+  GameEntry,
+  UpgradeEntry,
+} from "../types/types";
 const STORAGE_KEY = "rosters";
 
 // Normalise any value into a clean array
@@ -116,6 +123,10 @@ export function repairRoster(raw: unknown): Roster {
 
     data: {
       spells: Array.isArray(data.spells) ? (data.spells as Spell[]) : [],
+      games: Array.isArray(data.games) ? (data.games as GameEntry[]) : [],
+      upgrades: Array.isArray(data.upgrades)
+        ? (data.upgrades as UpgradeEntry[])
+        : [],
       theme: typeof data.theme === "string" ? data.theme : "default",
       totalEmbershards:
         typeof data.totalEmbershards === "number" ? data.totalEmbershards : 0,
