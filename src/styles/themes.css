@@ -140,3 +140,185 @@
   --color-input-bg: #e0e0e0;
   --color-input-text: #1a1a1a;
 }
+
+/* -------------------------------------------------------
+   LUMINETH REALM-LORDS
+   Sunlit gold + pure white + sapphire
+   ------------------------------------------------------- */
+.theme-lumineth {
+  --color-bg: #faf6e8;
+  --color-text: #1a1a1a;
+  --color-accent: #d4b24c;
+
+  --color-input-bg: #f2e8c9;
+  --color-input-text: #1a1a1a;
+}
+
+/* -------------------------------------------------------
+   IDONETH DEEPKIN
+   Abyssal blue + seafoam + blood coral
+   ------------------------------------------------------- */
+.theme-idoneth {
+  --color-bg: #00141f;
+  --color-text: #d6f7ff;
+  --color-accent: #4fc3f7;
+
+  --color-input-bg: #002633;
+  --color-input-text: #d6f7ff;
+}
+
+/* -------------------------------------------------------
+   DAUGHTERS OF KHAINE
+   Murder red + obsidian + ritual gold
+   ------------------------------------------------------- */
+.theme-khaine {
+  --color-bg: #2a0004;
+  --color-text: #ffe6e6;
+  --color-accent: #b30000;
+
+  --color-input-bg: #3d0007;
+  --color-input-text: #ffe6e6;
+}
+
+/* -------------------------------------------------------
+   SLAVES TO DARKNESS
+   Iron black + violet corruption
+   ------------------------------------------------------- */
+.theme-slaves {
+  --color-bg: #0f0f17;
+  --color-text: #e6e0ff;
+  --color-accent: #6a4fbf;
+
+  --color-input-bg: #1a1a26;
+  --color-input-text: #e6e0ff;
+}
+
+/* -------------------------------------------------------
+   BLADES OF KHORNE
+   Brass + blood red
+   ------------------------------------------------------- */
+.theme-khorne {
+  --color-bg: #2a0000;
+  --color-text: #ffe6e6;
+  --color-accent: #8b0000;
+
+  --color-input-bg: #3d0000;
+  --color-input-text: #ffe6e6;
+}
+
+/* -------------------------------------------------------
+   DISCIPLES OF TZEENTCH
+   Arcane blue + shifting violet
+   ------------------------------------------------------- */
+.theme-tzeentch {
+  --color-bg: #0a1a33;
+  --color-text: #e0f0ff;
+  --color-accent: #7aa6ff;
+
+  --color-input-bg: #112a4d;
+  --color-input-text: #e0f0ff;
+}
+
+/* -------------------------------------------------------
+   MAGGOTKIN OF NURGLE
+   Rot green + bile yellow
+   ------------------------------------------------------- */
+.theme-nurgle {
+  --color-bg: #0f1a0f;
+  --color-text: #e8ffd8;
+  --color-accent: #6b8f23;
+
+  --color-input-bg: #1a2b1a;
+  --color-input-text: #e8ffd8;
+}
+
+/* -------------------------------------------------------
+   HEDONITES OF SLAANESH
+   Lustful pink + decadent violet
+   ------------------------------------------------------- */
+.theme-slaanesh {
+  --color-bg: #1a0f1a;
+  --color-text: #ffe6ff;
+  --color-accent: #d147c6;
+
+  --color-input-bg: #2b1a2b;
+  --color-input-text: #ffe6ff;
+}
+
+/* -------------------------------------------------------
+   SKAVEN
+   Filthy grey + warpstone green
+   ------------------------------------------------------- */
+.theme-skaven {
+  --color-bg: #1a1a1a;
+  --color-text: #e6e6e6;
+  --color-accent: #6bbf59;
+
+  --color-input-bg: #2b2b2b;
+  --color-input-text: #e6e6e6;
+}
+
+/* -------------------------------------------------------
+   HELSMITHS OF HASHUT
+   Molten brass + soot black
+   ------------------------------------------------------- */
+.theme-helsmiths {
+  --color-bg: #1a0f0a;
+  --color-text: #ffe6d1;
+  --color-accent: #cc5500;
+
+  --color-input-bg: #2b1a14;
+  --color-input-text: #ffe6d1;
+}
+
+/* -------------------------------------------------------
+   OSSIARCH BONEREAPERS
+   Bone white + deathly teal
+   ------------------------------------------------------- */
+.theme-bonereapers {
+  --color-bg: #f2efe6;
+  --color-text: #1a1a1a;
+  --color-accent: #4fa3a3;
+
+  --color-input-bg: #e6e2d6;
+  --color-input-text: #1a1a1a;
+}
+
+/* -------------------------------------------------------
+   FLESH-EATER COURTS
+   Carrion red + grave grey
+   ------------------------------------------------------- */
+.theme-fecc {
+  --color-bg: #1a0d0d;
+  --color-text: #ffe6e6;
+  --color-accent: #a63a3a;
+
+  --color-input-bg: #2b1515;
+  --color-input-text: #ffe6e6;
+}
+
+/* -------------------------------------------------------
+   GLOOMSPITE GITZ
+   Madcap green + cave black
+   ------------------------------------------------------- */
+.theme-gitz {
+  --color-bg: #0d1a0d;
+  --color-text: #e6ffe6;
+  --color-accent: #4caf50;
+
+  --color-input-bg: #1a3320;
+  --color-input-text: #e6ffe6;
+}
+
+/* -------------------------------------------------------
+   SONS OF BEHEMAT
+   Giantstone grey + ochre
+   ------------------------------------------------------- */
+.theme-behemat {
+  --color-bg: #2b2b2b;
+  --color-text: #f2e6d0;
+  --color-accent: #c49a6c;
+
+  --color-input-bg: #3a3a3a;
+  --color-input-text: #f2e6d0;
+}

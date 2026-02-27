@@ -45,25 +45,38 @@ export default function UnitRow({
           onChange={(e) => onUpdate(unit.id, "name", e.target.value)}
         />
 
-        <div className="flex items-center gap-3">
-          <input
-            type="number"
-            className="bg-inputbg p-1 rounded w-14 text-right"
-            value={unit.points}
-            onChange={(e) =>
-              onUpdate(unit.id, "points", Number(e.target.value))
-            }
-          />
+        <div className="flex items-center gap-2">
+          {/* Points */}
+          <div className="flex items-center">
+            <input
+              type="number"
+              className="bg-inputbg p-1 rounded w-14 text-right"
+              value={unit.points}
+              onChange={(e) =>
+                onUpdate(unit.id, "points", Number(e.target.value))
+              }
+            />
+            <span className="ml-1 text-[10px] uppercase tracking-wide text-text/40">
+              pts
+            </span>
+          </div>
 
-          <input
-            type="number"
-            className="bg-inputbg p-1 rounded w-14 text-right"
-            value={unit.battleWounds}
-            onChange={(e) =>
-              onUpdate(unit.id, "battleWounds", Number(e.target.value))
-            }
-          />
+          {/* Wounds */}
+          <div className="flex items-center">
+            <input
+              type="number"
+              className="bg-inputbg p-1 rounded w-14 text-right"
+              value={unit.battleWounds}
+              onChange={(e) =>
+                onUpdate(unit.id, "battleWounds", Number(e.target.value))
+              }
+            />
+            <span className="ml-1 text-[10px] uppercase tracking-wide text-text/40">
+              wnds
+            </span>
+          </div>
 
+          {/* Reinforced */}
           <button
             className={`px-2 py-1 rounded text-white text-xs ${
               unit.reinforced ? "bg-green-600" : "bg-gray-600"
@@ -73,6 +86,7 @@ export default function UnitRow({
             R
           </button>
 
+          {/* Expand */}
           <button
             className="text-xs text-text/60 hover:text-text"
             onClick={() => setExpanded((v) => !v)}
@@ -80,6 +94,7 @@ export default function UnitRow({
             {expanded ? "▴" : "▾"}
           </button>
 
+          {/* Remove */}
           <button
             className="text-red-500 font-bold"
             onClick={() => onRemove(unit.id)}

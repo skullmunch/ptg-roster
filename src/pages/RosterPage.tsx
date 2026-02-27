@@ -18,6 +18,7 @@ export default function RosterPage() {
   const [newRegimentName, setNewRegimentName] = useState("");
   const [newSpellName, setNewSpellName] = useState("");
   const [spellsOpen, setSpellsOpen] = useState(true);
+  const [themeModal, setThemeModal] = useState(false);
 
   // Load roster
   useEffect(() => {
@@ -281,23 +282,13 @@ export default function RosterPage() {
                 {FACTION_ICONS[roster.faction ?? "cities"]}
               </div>
 
-              <select
-                className="border border-accent/40 rounded bg-inputbg text-inputtext px-2 py-1 text-xs"
-                value={theme}
-                onChange={(e) => updateData({ theme: e.target.value })}
+              {/* Theme Picker */}
+              <button
+                onClick={() => setThemeModal(true)}
+                className="px-3 py-1 text-xs border border-accent/40 rounded hover:border-accent transition"
               >
-                <option value="default">Default</option>
-                <option value="theme-soulblight">Soulblight</option>
-                <option value="theme-nighthaunt">Nighthaunt</option>
-                <option value="theme-stormcast">Stormcast</option>
-                <option value="theme-orruk">Orruk</option>
-                <option value="theme-ogor">Ogor</option>
-                <option value="theme-seraphon">Seraphon</option>
-                <option value="theme-fyreslayers">Fyreslayers</option>
-                <option value="theme-kharadron">Kharadron</option>
-                <option value="theme-sylvaneth">Sylvaneth</option>
-                <option value="theme-cities">Cities of Sigmar</option>
-              </select>
+                Change Theme
+              </button>
             </div>
           </div>
         </header>
@@ -372,6 +363,102 @@ export default function RosterPage() {
           onUpdateNotes={updateSpellNotes}
         />
       </div>
+      {themeModal && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="bg-bg p-4 rounded-xl border border-accent/40 max-w-md w-full max-h-[80vh] overflow-y-auto space-y-4 shadow-xl">
+            {/* Modal Header */}
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-bold">Choose Theme</h2>
+              <button
+                onClick={() => setThemeModal(false)}
+                className="text-text/60 hover:text-text"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Theme Grid */}
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { id: "default", name: "Default" },
+                { id: "theme-soulblight", name: "Soulblight" },
+                { id: "theme-nighthaunt", name: "Nighthaunt" },
+                { id: "theme-stormcast", name: "Stormcast" },
+                { id: "theme-orruk", name: "Orruk" },
+                { id: "theme-ogor", name: "Ogor" },
+                { id: "theme-seraphon", name: "Seraphon" },
+                { id: "theme-fyreslayers", name: "Fyreslayers" },
+                { id: "theme-kharadron", name: "Kharadron" },
+                { id: "theme-sylvaneth", name: "Sylvaneth" },
+                { id: "theme-cities", name: "Cities" },
+                { id: "theme-lumineth", name: "Lumineth" },
+                { id: "theme-idoneth", name: "Idoneth" },
+                { id: "theme-khaine", name: "Daughters of Khaine" },
+                { id: "theme-slaves", name: "Slaves to Darkness" },
+                { id: "theme-khorne", name: "Khorne" },
+                { id: "theme-tzeentch", name: "Tzeentch" },
+                { id: "theme-nurgle", name: "Nurgle" },
+                { id: "theme-slaanesh", name: "Slaanesh" },
+                { id: "theme-skaven", name: "Skaven" },
+                { id: "theme-helsmiths", name: "Helsmiths" },
+                { id: "theme-bonereapers", name: "Bonereapers" },
+                { id: "theme-fecc", name: "FEC" },
+                { id: "theme-gitz", name: "Gitz" },
+                { id: "theme-behemat", name: "Behemat" },
+              ].map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => {
+                    updateData({ theme: t.id });
+                    setThemeModal(false);
+                  }}
+                  className={`
+              flex items-center gap-3 p-2 rounded-md border transition text-xs
+              ${
+                theme === t.id
+                  ? "border-accent bg-accent/20 shadow-sm"
+                  : "border-inputbg/40 hover:border-accent/40"
+              }
+            `}
+                >
+                  {/* Theme preview swatch */}
+                  <div className={t.id}>
+                    <div className="w-10 h-6 rounded overflow-hidden flex flex-col">
+                      <div
+                        className="flex-1"
+                        style={{
+                          background:
+                            t.id === "default" ? "#1e1e1e" : "var(--color-bg)",
+                        }}
+                      />
+                      <div
+                        className="h-1"
+                        style={{
+                          background:
+                            t.id === "default"
+                              ? "#6b7280"
+                              : "var(--color-accent)",
+                        }}
+                      />
+                      <div
+                        className="flex-1"
+                        style={{
+                          background:
+                            t.id === "default"
+                              ? "#2a2a2a"
+                              : "var(--color-input-bg)",
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <span className="leading-tight">{t.name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
