@@ -21,7 +21,7 @@ export default function CreateRosterPage() {
       name: name.trim(),
       formation: formation.trim(),
       faction: faction || "cities",
-
+      lastUpdated: Date.now(),
       data: {
         theme: "default",
         totalEmbershards: 0,
