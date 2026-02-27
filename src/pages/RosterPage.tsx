@@ -19,6 +19,8 @@ export default function RosterPage() {
   const [newSpellName, setNewSpellName] = useState("");
   const [spellsOpen, setSpellsOpen] = useState(true);
   const [themeModal, setThemeModal] = useState(false);
+  const [editingName, setEditingName] = useState(false);
+  const [editingFormation, setEditingFormation] = useState(false);
 
   // Load roster
   useEffect(() => {
@@ -270,11 +272,72 @@ export default function RosterPage() {
         {/* HEADER */}
         <header className="relative p-6 rounded-xl bg-gradient-to-br from-bg/60 to-bg/20 border border-accent/40 shadow-lg overflow-hidden">
           <div className="relative flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold tracking-wide">
-                {roster.name}
-              </h1>
-              <p className="text-sm text-text/70 mt-1">{roster.formation}</p>
+            <div className="space-y-1">
+              {/* Editable Roster Name */}
+              <div className="flex items-center gap-2">
+                {editingName ? (
+                  <input
+                    className="bg-inputbg border border-accent/40 rounded px-2 py-1 text-xl font-bold"
+                    value={roster.name}
+                    onChange={(e) =>
+                      setRoster((prev) =>
+                        prev ? { ...prev, name: e.target.value } : prev,
+                      )
+                    }
+                    onBlur={() => setEditingName(false)}
+                    autoFocus
+                  />
+                ) : (
+                  <h1 className="text-3xl font-bold tracking-wide">
+                    {roster.name}
+                  </h1>
+                )}
+
+                <button
+                  className="text-text/60 hover:text-text"
+                  onClick={() => setEditingName(true)}
+                >
+                  <svg
+                    className="w-4 h-4 text-text/60 hover:text-text"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-9.193 9.193L4 16l.393-3.221 9.193-9.193z" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Editable Formation */}
+              <div className="flex items-center gap-2">
+                {editingFormation ? (
+                  <input
+                    className="bg-inputbg border border-accent/40 rounded px-2 py-1 text-sm"
+                    value={roster.formation}
+                    onChange={(e) =>
+                      setRoster((prev) =>
+                        prev ? { ...prev, formation: e.target.value } : prev,
+                      )
+                    }
+                    onBlur={() => setEditingFormation(false)}
+                    autoFocus
+                  />
+                ) : (
+                  <p className="text-sm text-text/70">{roster.formation}</p>
+                )}
+
+                <button
+                  className="text-text/60 hover:text-text"
+                  onClick={() => setEditingFormation(true)}
+                >
+                  <svg
+                    className="w-4 h-4 text-text/60 hover:text-text"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-9.193 9.193L4 16l.393-3.221 9.193-9.193z" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             <div className="flex items-center gap-3">

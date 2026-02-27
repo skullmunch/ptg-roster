@@ -41,6 +41,7 @@ export default function UnitRow({
       <div className="flex items-center justify-between gap-2">
         <input
           className="bg-inputbg p-1 rounded text-sm font-semibold flex-1 min-w-0"
+          placeholder="Warscroll Name"
           value={unit.name}
           onChange={(e) => onUpdate(unit.id, "name", e.target.value)}
         />
@@ -81,7 +82,15 @@ export default function UnitRow({
             className={`px-2 py-1 rounded text-white text-xs ${
               unit.reinforced ? "bg-green-600" : "bg-gray-600"
             }`}
-            onClick={() => onUpdate(unit.id, "reinforced", !unit.reinforced)}
+            onClick={() => {
+              const newReinforced = !unit.reinforced;
+              const newPoints = newReinforced
+                ? unit.points * 2
+                : unit.points / 2;
+
+              onUpdate(unit.id, "points", newPoints);
+              onUpdate(unit.id, "reinforced", newReinforced);
+            }}
           >
             R
           </button>
@@ -142,15 +151,29 @@ export default function UnitRow({
 
           {unit.path && (
             <div className="flex flex-col gap-2">
+              {/* Path row with remove button */}
               <div className="flex items-center gap-2">
                 <label className="w-20 text-text/70">Path</label>
+
                 <input
                   className="bg-inputbg p-1 rounded flex-1"
                   value={unit.path}
                   onChange={(e) => onUpdate(unit.id, "path", e.target.value)}
                 />
+
+                {/* Remove Path button */}
+                <button
+                  className="text-red-500 font-bold text-lg leading-none hover:text-red-400"
+                  onClick={() => {
+                    onUpdate(unit.id, "path", "");
+                    onUpdate(unit.id, "rank", "");
+                  }}
+                >
+                  ✕
+                </button>
               </div>
 
+              {/* Rank only shows when path exists */}
               <div className="flex items-center gap-2">
                 <label className="w-20 text-text/70">Rank</label>
                 <select
@@ -158,7 +181,6 @@ export default function UnitRow({
                   value={unit.rank ?? ""}
                   onChange={(e) => onUpdate(unit.id, "rank", e.target.value)}
                 >
-                  <option value="">None</option>
                   <option value="aspiring">Aspiring</option>
                   <option value="elite">Elite</option>
                   <option value="mighty">Mighty</option>

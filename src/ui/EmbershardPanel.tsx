@@ -42,9 +42,14 @@ export default function EmbershardPanel({
       </div>
 
       {/* Points + Terrain */}
-      <div className="p-4 rounded-lg bg-inputbg/20 border border-accent/40 shadow">
+      <div
+        className="p-4 rounded-lg bg-inputbg/20 border border-accent/40 shadow
+                flex flex-col items-center text-center"
+      >
         <span className="text-xs text-text/70">Total Army Points</span>
+
         <span className="text-2xl font-bold mt-1 block">{totalPoints}</span>
+
         <button
           className={`mt-2 text-xs px-2 py-1 rounded ${
             terrainPurchased ? "bg-accent" : "bg-inputbg/40"

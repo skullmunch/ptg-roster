@@ -42,27 +42,31 @@ export default function SpellList({
           {spells.map((spell) => (
             <div
               key={spell.id}
-              className="flex flex-col gap-2 p-2 bg-inputbg/20 rounded"
+              className="p-2 bg-inputbg/20 rounded border border-inputbg/40 space-y-2"
             >
-              <input
-                className="bg-inputbg p-1 rounded"
-                value={spell.name}
-                onChange={(e) => onRename(spell.id, e.target.value)}
-              />
+              {/* Header row: name + delete */}
+              <div className="flex items-center justify-between">
+                <input
+                  className="bg-inputbg p-1 rounded flex-1"
+                  value={spell.name}
+                  onChange={(e) => onRename(spell.id, e.target.value)}
+                />
 
+                <button
+                  className="text-red-500 font-bold text-lg leading-none ml-2 hover:text-red-400"
+                  onClick={() => onRemove(spell.id)}
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Notes */}
               <textarea
-                className="bg-inputbg p-1 rounded text-sm"
+                className="bg-inputbg p-1 rounded text-sm w-full"
                 placeholder="Notes (optional)"
                 value={spell.notes ?? ""}
                 onChange={(e) => onUpdateNotes(spell.id, e.target.value)}
               />
-
-              <button
-                className="text-red-500 text-xs"
-                onClick={() => onRemove(spell.id)}
-              >
-                Delete
-              </button>
             </div>
           ))}
         </div>
