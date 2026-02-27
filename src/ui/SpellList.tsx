@@ -1,3 +1,5 @@
+import type { SpellListProps } from "../types/props";
+
 export default function SpellList({
   spells,
   spellsOpen,
@@ -7,7 +9,7 @@ export default function SpellList({
   onAdd,
   onRename,
   onRemove,
-}) {
+}: SpellListProps) {
   return (
     <section className="space-y-4">
       <div

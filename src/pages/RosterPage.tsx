@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getRoster, saveRoster } from "../storage/rosterStorage";
-import { Roster, RosterData, Regiment, Unit, Spell } from "../types/types";
+import type { Roster, RosterData, Regiment, Unit, Spell } from "../types/types";
 import NavBar from "../ui/NavBar";
 import EmbershardPanel from "../ui/EmbershardPanel";
 import RegimentCard from "../ui/RegimentCard";

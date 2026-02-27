@@ -1,8 +1,8 @@
 // src/ui/FactionIcons.tsx
 
-import React from "react";
+import type { ReactNode } from "react";
 
-export const FACTION_ICONS: Record<string, JSX.Element> = {
+export const FACTION_ICONS: Record<string, ReactNode> = {
   soulblight: (
     <svg viewBox="0 0 24 24" className="w-10 h-10 fill-red-600">
       <path d="M12 2l3 6-3 2-3-2 3-6zm0 8l7 4-7 8-7-8 7-4z" />

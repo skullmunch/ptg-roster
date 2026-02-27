@@ -1,3 +1,5 @@
+import type { EmbershardPanelProps } from "../types/props";
+
 export default function EmbershardPanel({
   total,
   current,
@@ -8,7 +10,7 @@ export default function EmbershardPanel({
   incCurrent,
   decCurrent,
   toggleTerrain,
-}) {
+}: EmbershardPanelProps) {
   return (
     <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
       {/* Total */}

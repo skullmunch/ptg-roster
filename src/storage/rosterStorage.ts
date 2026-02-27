@@ -1,5 +1,5 @@
 // rosterStorage.ts
-import { Roster } from "../types/types";
+import type { Roster } from "../types/types";
 const STORAGE_KEY = "rosters";
 
 function loadAll(): Roster[] {

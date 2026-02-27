@@ -1,4 +1,6 @@
-export default function UnitRow({ unit, onUpdate, onRemove }) {
+import type { UnitRowProps } from "../types/props";
+
+export default function UnitRow({ unit, onUpdate, onRemove }: UnitRowProps) {
   return (
     <div className="grid grid-cols-[2fr_1fr_1fr_auto] gap-2 items-center text-xs border-t border-inputbg/40 pt-2">
       <input

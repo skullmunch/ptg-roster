@@ -1,3 +1,4 @@
+import type { RegimentCardProps } from "../types/props";
 import UnitRow from "./UnitRow";
 
 export default function RegimentCard({
@@ -9,7 +10,7 @@ export default function RegimentCard({
   onUpdateUnit,
   onRemoveUnit,
   regimentPoints,
-}) {
+}: RegimentCardProps) {
   return (
     <div className="rounded-lg border border-accent/40 bg-inputbg/20 shadow">
       {/* Header */}
