@@ -2,9 +2,29 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ptg-roster</title>
+    <title>Path to Glory Tracker</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href='data:image/svg+xml;utf8,
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+      <rect width="64" height="64" fill="black"/>
+      <path d="M32 6c-11 0-20 9-20 20v8c0 6 3 11 8 14v10h24V48c5-3 8-8 8-14v-8c0-11-9-20-20-20z" fill="white"/>
+      <rect x="18" y="26" width="10" height="10" rx="2" fill="black"/>
+      <rect x="36" y="26" width="10" height="10" rx="2" fill="black"/>
+      <rect x="26" y="42" width="12" height="10" rx="2" fill="black"/>
+    </svg>'
+    />
+    <script>
+      (function () {
+        const redirect = sessionStorage.redirect;
+        if (redirect) {
+          delete sessionStorage.redirect;
+          history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
