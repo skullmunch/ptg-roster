@@ -23,6 +23,7 @@ function repairUnit(u: unknown): Unit {
   return {
     id: typeof raw.id === "string" ? raw.id : crypto.randomUUID(),
     name: typeof raw.name === "string" ? raw.name : "New Unit",
+    customName: typeof raw.customName === "string" ? raw.customName : undefined,
 
     path: typeof raw.path === "string" ? raw.path : null,
     rank: typeof raw.rank === "string" ? raw.rank : null,

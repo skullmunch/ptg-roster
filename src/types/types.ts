@@ -4,6 +4,7 @@
 export interface Unit {
   id: string;
   name: string;
+  customName?: string;
 
   // Core progression fields
   path: string | null;

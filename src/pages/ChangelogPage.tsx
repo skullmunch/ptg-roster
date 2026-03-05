@@ -9,6 +9,18 @@ export default function ChangelogPage() {
         <h1 className="text-2xl font-bold tracking-wide mb-4">Changelog</h1>
 
         <section>
+          <h2 className="text-lg font-semibold">v1.1</h2>
+          <ul className="list-disc ml-6 mt-2 space-y-1">
+            <li>Added "Draw" as match outcome.</li>
+            <li>
+              Fixed mobile bug where a zero would stay in the points and wounds
+              field.
+            </li>
+            <li>Added Custom Name's to be added to units.</li>
+          </ul>
+        </section>
+
+        <section>
           <h2 className="text-lg font-semibold">v1.0</h2>
           <ul className="list-disc ml-6 mt-2 space-y-1">
             <li>Initial release of the Path to Glory tracker.</li>

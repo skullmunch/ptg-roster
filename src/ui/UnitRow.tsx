@@ -9,22 +9,23 @@ export default function UnitRow({
   onRemoveAbility,
 }: UnitRowProps) {
   const [expanded, setExpanded] = useState(false);
+
+  // Local numeric input buffers
   const [woundsInput, setWoundsInput] = useState(unit.battleWounds.toString());
   const [pointsInput, setPointsInput] = useState(unit.points.toString());
 
-  // Normalise any value into an array
+  // Convert any value to array
   const toArray = <T,>(value: T[] | T | undefined | null): T[] => {
     if (Array.isArray(value)) return value.filter((v) => v !== "");
     if (value == null || value === "") return [];
     return [value];
   };
 
-  // Safe arrays
   const battleScars = toArray(unit.battleScars);
   const enhancements = toArray(unit.enhancements);
   const abilities = toArray(unit.abilities);
 
-  // Local input states
+  // Local UI states
   const [newPath, setNewPath] = useState("");
   const [addingPath, setAddingPath] = useState(false);
 
@@ -37,11 +38,16 @@ export default function UnitRow({
   const [newAbility, setNewAbility] = useState("");
   const [addingAbilityInput, setAddingAbilityInput] = useState(false);
 
+  // Custom name toggle
+  const [editingCustomName, setEditingCustomName] = useState(
+    Boolean(unit.customName),
+  );
+
   return (
     <div className="border-t border-inputbg/40 pt-3 pb-4 w-full">
       {/* Essentials Bar */}
       <div className="flex items-center justify-between gap-2">
-        {/* ▼ Expand button moved to the LEFT */}
+        {/* Expand button */}
         <button
           className="text-xs text-text/60 hover:text-text transition-transform"
           onClick={() => setExpanded((v) => !v)}
@@ -49,194 +55,247 @@ export default function UnitRow({
           {expanded ? "▴" : "▾"}
         </button>
 
-        {/* Name */}
-        <input
-          className="bg-inputbg p-1 rounded text-sm font-semibold flex-1 min-w-0"
-          placeholder="Warscroll Name"
-          value={unit.name}
-          onChange={(e) => onUpdate(unit.id, "name", e.target.value)}
-        />
-
-        <div className="flex items-center gap-2">
-          {/* Points */}
-          <div className="flex items-center">
-            <input
-              type="text"
-              inputMode="numeric"
-              className="bg-inputbg p-1 rounded w-14 text-right"
-              value={pointsInput}
-              onChange={(e) => {
-                const val = e.target.value;
-
-                // Allow empty while typing
-                if (val === "") {
-                  setPointsInput("");
-                  return;
-                }
-
-                // Only allow digits
-                if (/^\d+$/.test(val)) {
-                  setPointsInput(val);
-                  onUpdate(unit.id, "points", Number(val));
-                }
-              }}
-              onBlur={() => {
-                // If left empty, revert to last valid value
-                if (pointsInput === "") {
-                  setPointsInput(unit.points.toString());
-                }
-              }}
-            />
-            <span className="ml-1 text-[10px] uppercase tracking-wide text-text/40">
-              pts
-            </span>
-          </div>
-
-          {/* Wounds */}
-          <div className="flex items-center">
-            <input
-              type="text"
-              inputMode="numeric"
-              className="bg-inputbg p-1 rounded w-14 text-right"
-              value={woundsInput}
-              onChange={(e) => {
-                const val = e.target.value;
-
-                // Allow empty string while typing
-                if (val === "") {
-                  setWoundsInput("");
-                  return;
-                }
-
-                // Allow only digits
-                if (/^\d+$/.test(val)) {
-                  setWoundsInput(val);
-                  onUpdate(unit.id, "battleWounds", Number(val));
-                }
-              }}
-              onBlur={() => {
-                // If user leaves it empty, revert to last valid value
-                if (woundsInput === "") {
-                  setWoundsInput(unit.battleWounds.toString());
-                }
-              }}
-            />
-            <span className="ml-1 text-[10px] uppercase tracking-wide text-text/40">
-              wnds
-            </span>
-          </div>
-
-          {/* Reinforced */}
-          <button
-            className={`px-2 py-1 rounded text-white text-xs ${
-              unit.reinforced ? "bg-green-600" : "bg-gray-600"
-            }`}
-            onClick={() => {
-              const newReinforced = !unit.reinforced;
-
-              // Calculate new points
-              const newPoints = newReinforced
-                ? unit.points * 2
-                : Math.max(1, Math.floor(unit.points / 2)); // safety floor
-
-              // Commit to parent
-              onUpdate(unit.id, "reinforced", newReinforced);
-              onUpdate(unit.id, "points", newPoints);
-
-              // Update local input buffer so UI stays in sync
-              setPointsInput(newPoints.toString());
-            }}
-          >
-            R
-          </button>
-
-          {/* Remove */}
-          <button
-            className="text-red-500 font-bold"
-            onClick={() => onRemove(unit.id)}
-          >
-            ✕
-          </button>
-        </div>
-      </div>
-
-      {/* Expanded Details */}
-      {expanded && (
-        <div className="mt-3 flex flex-col gap-4 text-xs">
-          {/* PATH + RANK */}
-          {!unit.path && !addingPath && (
-            <button
-              className="text-accent underline text-left"
-              onClick={() => setAddingPath(true)}
-            >
-              Add Path
-            </button>
-          )}
-
-          {addingPath && (
-            <div className="flex gap-2 items-center">
+        {/* Name Block */}
+        <div className="flex flex-col flex-1 min-w-0">
+          {/* Custom Name (only visible when editing or already set) */}
+          {editingCustomName && (
+            <div className="flex items-center gap-2 mb-1">
               <input
-                className="bg-inputbg p-1 rounded flex-1"
-                placeholder="Path name"
-                value={newPath}
-                onChange={(e) => setNewPath(e.target.value)}
+                className="bg-inputbg p-1 rounded text-sm font-semibold flex-1"
+                placeholder="Custom Name"
+                value={unit.customName ?? ""}
+                onChange={(e) =>
+                  onUpdate(unit.id, "customName", e.target.value)
+                }
               />
-              <button
-                className="bg-accent text-white px-2 py-1 rounded"
-                onClick={() => {
-                  if (newPath.trim().length > 0) {
-                    onUpdate(unit.id, "path", newPath.trim());
-                    setNewPath("");
-                    setAddingPath(false);
-                  }
-                }}
-              >
-                Add
-              </button>
+
+              {/* Remove button next to input */}
+              {unit.customName && (
+                <button
+                  className="text-red-500 text-sm"
+                  onClick={() => {
+                    onUpdate(unit.id, "customName", undefined);
+                    setEditingCustomName(false);
+                  }}
+                >
+                  ✕
+                </button>
+              )}
             </div>
           )}
 
-          {unit.path && (
-            <div className="flex flex-col gap-2">
-              {/* Path row */}
-              <div className="flex items-center gap-2">
-                <label className="w-20 text-text/70">Path</label>
-                <input
-                  className="bg-inputbg p-1 rounded flex-1"
-                  value={unit.path}
-                  onChange={(e) => onUpdate(unit.id, "path", e.target.value)}
-                />
+          {/* Warscroll Name */}
+          <input
+            className={`bg-inputbg p-1 rounded w-full ${
+              editingCustomName
+                ? "text-xs text-text/60"
+                : "text-sm font-semibold"
+            }`}
+            placeholder="Warscroll Name"
+            value={unit.name}
+            onChange={(e) => onUpdate(unit.id, "name", e.target.value)}
+          />
+        </div>
+
+        {/* Points */}
+        <div className="flex items-center">
+          <input
+            type="text"
+            inputMode="numeric"
+            className="bg-inputbg p-1 rounded w-14 text-right"
+            value={pointsInput}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (val === "") {
+                setPointsInput("");
+                return;
+              }
+              if (/^\d+$/.test(val)) {
+                setPointsInput(val);
+                onUpdate(unit.id, "points", Number(val));
+              }
+            }}
+            onBlur={() => {
+              if (pointsInput === "") {
+                setPointsInput(unit.points.toString());
+              }
+            }}
+          />
+          <span className="ml-1 text-[10px] uppercase tracking-wide text-text/40">
+            pts
+          </span>
+        </div>
+
+        {/* Wounds */}
+        <div className="flex items-center">
+          <input
+            type="text"
+            inputMode="numeric"
+            className="bg-inputbg p-1 rounded w-14 text-right"
+            value={woundsInput}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (val === "") {
+                setWoundsInput("");
+                return;
+              }
+              if (/^\d+$/.test(val)) {
+                setWoundsInput(val);
+                onUpdate(unit.id, "battleWounds", Number(val));
+              }
+            }}
+            onBlur={() => {
+              if (woundsInput === "") {
+                setWoundsInput(unit.battleWounds.toString());
+              }
+            }}
+          />
+          <span className="ml-1 text-[10px] uppercase tracking-wide text-text/40">
+            wnds
+          </span>
+        </div>
+
+        {/* Reinforced */}
+        <button
+          className={`px-2 py-1 rounded text-white text-xs ${
+            unit.reinforced ? "bg-green-600" : "bg-gray-600"
+          }`}
+          onClick={() => {
+            const newReinforced = !unit.reinforced;
+            const newPoints = newReinforced
+              ? unit.points * 2
+              : Math.max(1, Math.floor(unit.points / 2));
+
+            onUpdate(unit.id, "reinforced", newReinforced);
+            onUpdate(unit.id, "points", newPoints);
+            setPointsInput(newPoints.toString());
+          }}
+        >
+          R
+        </button>
+
+        {/* Remove */}
+        <button
+          className="text-red-500 font-bold"
+          onClick={() => onRemove(unit.id)}
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Expanded Section */}
+      {expanded && (
+        <div className="mt-3 flex flex-col gap-4 text-xs">
+          {/* CUSTOM NAME (dropdown controls only – input stays in Essentials Bar) */}
+          <div>
+            {/* Heading only when NOT editing AND no custom name */}
+            {!editingCustomName && !unit.customName && (
+              <div className="font-semibold mb-1">Custom Name</div>
+            )}
+
+            {/* When a custom name exists: show name + remove button */}
+            {unit.customName && !editingCustomName && (
+              <div className="flex justify-between items-center mb-1">
+                <span>{unit.customName}</span>
                 <button
-                  className="text-red-500 font-bold text-lg leading-none hover:text-red-400"
+                  className="text-red-500"
                   onClick={() => {
-                    onUpdate(unit.id, "path", "");
-                    onUpdate(unit.id, "rank", "");
+                    onUpdate(unit.id, "customName", undefined);
+                    setEditingCustomName(false);
                   }}
                 >
                   ✕
                 </button>
               </div>
+            )}
 
-              {/* Rank */}
-              <div className="flex items-center gap-2">
-                <label className="w-20 text-text/70">Rank</label>
-                <select
+            {/* Add button when no custom name and not editing */}
+            {!unit.customName && !editingCustomName && (
+              <button
+                className="text-accent underline"
+                onClick={() => setEditingCustomName(true)}
+              >
+                Add Custom Name
+              </button>
+            )}
+          </div>
+
+          {/* PATH + RANK */}
+          <div>
+            <div className="font-semibold mb-1">Paths</div>
+            {!unit.path && !addingPath && (
+              <button
+                className="text-accent underline text-left"
+                onClick={() => setAddingPath(true)}
+              >
+                Add Path
+              </button>
+            )}
+
+            {addingPath && (
+              <div className="flex gap-2 items-center">
+                <input
                   className="bg-inputbg p-1 rounded flex-1"
-                  value={unit.rank ?? ""}
-                  onChange={(e) => onUpdate(unit.id, "rank", e.target.value)}
+                  placeholder="Path name"
+                  value={newPath}
+                  onChange={(e) => setNewPath(e.target.value)}
+                />
+                <button
+                  className="bg-accent text-white px-2 py-1 rounded"
+                  onClick={() => {
+                    if (newPath.trim().length > 0) {
+                      onUpdate(unit.id, "path", newPath.trim());
+                      setNewPath("");
+                      setAddingPath(false);
+                    }
+                  }}
                 >
-                  <option value="aspiring">Aspiring</option>
-                  <option value="elite">Elite</option>
-                  <option value="mighty">Mighty</option>
-                  <option value="legendary">Legendary</option>
-                </select>
+                  Add
+                </button>
               </div>
-            </div>
-          )}
+            )}
+
+            {unit.path && (
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  <label className="w-20 text-text/70">Path</label>
+                  <input
+                    className="bg-inputbg p-1 rounded flex-1"
+                    value={unit.path}
+                    onChange={(e) => onUpdate(unit.id, "path", e.target.value)}
+                  />
+                  <button
+                    className="text-red-500 font-bold text-lg leading-none hover:text-red-400"
+                    onClick={() => {
+                      onUpdate(unit.id, "path", "");
+                      onUpdate(unit.id, "rank", "");
+                    }}
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <label className="w-20 text-text/70">Rank</label>
+                  <select
+                    className="bg-inputbg p-1 rounded flex-1"
+                    value={unit.rank ?? ""}
+                    onChange={(e) => onUpdate(unit.id, "rank", e.target.value)}
+                  >
+                    <option value="aspiring">Aspiring</option>
+                    <option value="elite">Elite</option>
+                    <option value="mighty">Mighty</option>
+                    <option value="legendary">Legendary</option>
+                  </select>
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* BATTLE SCARS */}
           <div>
             <div className="font-semibold mb-1">Battle Scars</div>
+
             {battleScars.map((scar, i) => (
               <div key={i} className="flex justify-between items-center mb-1">
                 <span>{scar}</span>
@@ -294,6 +353,7 @@ export default function UnitRow({
           {/* ENHANCEMENTS */}
           <div>
             <div className="font-semibold mb-1">Enhancements</div>
+
             {enhancements.map((enh, i) => (
               <div key={i} className="flex justify-between items-center mb-1">
                 <span>{enh}</span>
@@ -352,6 +412,7 @@ export default function UnitRow({
           {unit.path && (
             <div>
               <div className="font-semibold mb-1">Abilities</div>
+
               {abilities.map((ability, i) => (
                 <div key={i} className="flex justify-between items-center mb-1">
                   <span>{ability}</span>

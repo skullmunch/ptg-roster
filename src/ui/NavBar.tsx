@@ -28,7 +28,7 @@ export default function NavBar() {
             <div className="text-2xl font-bold tracking-wide">
               Path to Glory
             </div>
-            <span className="text-[10px] text-text/60 tracking-wide">v1.0</span>
+            <span className="text-[10px] text-text/60 tracking-wide">v1.1</span>
           </div>
         </Link>
 
