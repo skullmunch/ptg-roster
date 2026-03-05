@@ -74,7 +74,7 @@ export interface GameEntry {
   opponent: string;
   battleplan: string;
   shards: number;
-  winner: "you" | "opponent";
+  winner: "you" | "opponent" | "draw";
 }
 
 export interface UpgradeEntry {

@@ -39,7 +39,7 @@ export default function GameLogPage({ games, onAddGame, onRemoveGame }: Props) {
       opponent: opponent.trim(),
       battleplan: battleplan.trim(),
       shards: Number(shards || 0),
-      winner: winner as "you" | "opponent",
+      winner: winner as "you" | "opponent" | "draw",
     });
 
     setOpponent("");
@@ -107,6 +107,7 @@ export default function GameLogPage({ games, onAddGame, onRemoveGame }: Props) {
             <option value="">Who won?</option>
             <option value="you">You</option>
             <option value="opponent">Opponent</option>
+            <option value="draw">Draw</option>
           </select>
           {errors.winner && (
             <p className="text-red-400 text-xs mt-1">{errors.winner}</p>
@@ -153,7 +154,13 @@ export default function GameLogPage({ games, onAddGame, onRemoveGame }: Props) {
 
             <div className="text-sm">
               <span className="font-semibold">Winner:</span>{" "}
-              {g.winner === "you" ? "You" : g.opponent}
+              {
+                {
+                  you: "You",
+                  opponent: g.opponent,
+                  draw: "Draw",
+                }[g.winner]
+              }
             </div>
           </div>
         ))}

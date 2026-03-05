@@ -9,6 +9,8 @@ export default function UnitRow({
   onRemoveAbility,
 }: UnitRowProps) {
   const [expanded, setExpanded] = useState(false);
+  const [woundsInput, setWoundsInput] = useState(unit.battleWounds.toString());
+  const [pointsInput, setPointsInput] = useState(unit.points.toString());
 
   // Normalise any value into an array
   const toArray = <T,>(value: T[] | T | undefined | null): T[] => {
@@ -59,12 +61,31 @@ export default function UnitRow({
           {/* Points */}
           <div className="flex items-center">
             <input
-              type="number"
+              type="text"
+              inputMode="numeric"
               className="bg-inputbg p-1 rounded w-14 text-right"
-              value={unit.points}
-              onChange={(e) =>
-                onUpdate(unit.id, "points", Number(e.target.value))
-              }
+              value={pointsInput}
+              onChange={(e) => {
+                const val = e.target.value;
+
+                // Allow empty while typing
+                if (val === "") {
+                  setPointsInput("");
+                  return;
+                }
+
+                // Only allow digits
+                if (/^\d+$/.test(val)) {
+                  setPointsInput(val);
+                  onUpdate(unit.id, "points", Number(val));
+                }
+              }}
+              onBlur={() => {
+                // If left empty, revert to last valid value
+                if (pointsInput === "") {
+                  setPointsInput(unit.points.toString());
+                }
+              }}
             />
             <span className="ml-1 text-[10px] uppercase tracking-wide text-text/40">
               pts
@@ -74,12 +95,31 @@ export default function UnitRow({
           {/* Wounds */}
           <div className="flex items-center">
             <input
-              type="number"
+              type="text"
+              inputMode="numeric"
               className="bg-inputbg p-1 rounded w-14 text-right"
-              value={unit.battleWounds}
-              onChange={(e) =>
-                onUpdate(unit.id, "battleWounds", Number(e.target.value))
-              }
+              value={woundsInput}
+              onChange={(e) => {
+                const val = e.target.value;
+
+                // Allow empty string while typing
+                if (val === "") {
+                  setWoundsInput("");
+                  return;
+                }
+
+                // Allow only digits
+                if (/^\d+$/.test(val)) {
+                  setWoundsInput(val);
+                  onUpdate(unit.id, "battleWounds", Number(val));
+                }
+              }}
+              onBlur={() => {
+                // If user leaves it empty, revert to last valid value
+                if (woundsInput === "") {
+                  setWoundsInput(unit.battleWounds.toString());
+                }
+              }}
             />
             <span className="ml-1 text-[10px] uppercase tracking-wide text-text/40">
               wnds
@@ -93,11 +133,18 @@ export default function UnitRow({
             }`}
             onClick={() => {
               const newReinforced = !unit.reinforced;
+
+              // Calculate new points
               const newPoints = newReinforced
                 ? unit.points * 2
-                : unit.points / 2;
-              onUpdate(unit.id, "points", newPoints);
+                : Math.max(1, Math.floor(unit.points / 2)); // safety floor
+
+              // Commit to parent
               onUpdate(unit.id, "reinforced", newReinforced);
+              onUpdate(unit.id, "points", newPoints);
+
+              // Update local input buffer so UI stays in sync
+              setPointsInput(newPoints.toString());
             }}
           >
             R
